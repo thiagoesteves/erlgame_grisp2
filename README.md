@@ -44,7 +44,7 @@ Once the files are generate, you can just copy them to the SD-Card
 $ make docker.build
 ````
 #### Deploy using the image builder
-Before generating the deployment files, be sure you read all documentation about [deployment with wi-fi](https://github.com/grisp/grisp/wiki/Connecting-over-WiFI-and-Ethernet) and also setup all values in according with your environment:
+Before generating the deployment files, be sure you read all documentation about [deployment with wi-fi](https://github.com/grisp/grisp/wiki/Connecting-over-WiFI-and-Ethernet) and also setup all values accordingly with your environment:
 ```
 $ make grisp.image
 ````
