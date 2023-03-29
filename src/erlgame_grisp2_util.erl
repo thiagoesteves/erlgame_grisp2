@@ -1,12 +1,12 @@
 %%%-------------------------------------------------------------------
 %%% Created : 29 Mar 2023 by Thiago Esteves <thiagocalori@gmail.com>
 %%%
-%%% @doc This file contains the APIs
+%%% @doc This file generic APIs to use in the project
 %%%
 %%% @end
 %%%-------------------------------------------------------------------
 
--module(erlgame_grisp2).
+-module(erlgame_grisp2_util).
 
 -author('Thiago Esteves').
 
@@ -20,6 +20,9 @@
 %%% Function exports
 %%%===================================================================
 
+%% Public API
+-export([maybe_string_to_atom/1]).
+
 %%%===================================================================
 %%% Local Defines
 %%%===================================================================
@@ -27,6 +30,20 @@
 %%%===================================================================
 %%% API
 %%%===================================================================
+
+%%--------------------------------------------------------------------
+%% @doc Try to create a atom from a list or use an existing one
+%%
+%% @param Str String to be converted
+%% @end
+%%--------------------------------------------------------------------
+-spec maybe_string_to_atom(Str :: list()) -> atom().
+maybe_string_to_atom(Str) when is_list(Str) ->
+  try 
+    erlang:list_to_existing_atom(Str)
+  catch
+    _:_ -> erlang:list_to_atom(Str)
+  end.
 
 %%====================================================================
 %% Internal functions

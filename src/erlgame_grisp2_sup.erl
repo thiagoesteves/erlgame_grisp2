@@ -1,19 +1,66 @@
-% @private
-% @doc erlgame_grisp2 top level supervisor.
+%%%-------------------------------------------------------------------
+%%% Created : 29 Mar 2023 by Thiago Esteves <thiagocalori@gmail.com>
+%%%
+%%% @doc This is top level supervisor
+%%%
+%%% @end
+%%%-------------------------------------------------------------------
+
 -module(erlgame_grisp2_sup).
 
--behavior(supervisor).
+-author('Thiago Esteves').
 
-% API
+%%%===================================================================
+%%% Includes
+%%%===================================================================
+
+-include("erlgame.hrl").
+
+%% For LOG purposes
+-include_lib("kernel/include/logger.hrl").
+
+%%====================================================================
+%% API functions
+%%====================================================================
+
 -export([start_link/0]).
 
-% Callbacks
 -export([init/1]).
 
-%--- API -----------------------------------------------------------------------
+%%====================================================================
+%% Local Definitions
+%%====================================================================
 
-start_link() -> supervisor:start_link({local, ?MODULE}, ?MODULE, []).
+-define(SERVER,         ?MODULE).
+-define(SNAKE_GAME_SUP, erlgame_grisp2_snake_sm_sup).
 
-%--- Callbacks -----------------------------------------------------------------
+%%====================================================================
+%% API functions implementation
+%%====================================================================
 
-init([]) -> {ok, { {one_for_all, 0, 1}, []} }.
+start_link() ->
+    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
+
+init([]) ->
+  SupFlags = #{strategy => one_for_one,
+               intensity => 4,
+               period => 30},
+
+  ChildSpecs = [
+                  #{id => ?DB_NAME,
+                    start => {?DB_NAME, start_link, []},
+                    restart => permanent,
+                    type => worker,
+                    shutdown => brutal_kill},
+
+                  #{id => ?SNAKE_GAME_SUP,
+                    start => {?SNAKE_GAME_SUP, start_link, []},
+                    restart => permanent,
+                    type => supervisor,
+                    shutdown => brutal_kill}
+                ],
+  {ok, {SupFlags, ChildSpecs}}.
+
+%%====================================================================
+%% Internal functions
+%%====================================================================
