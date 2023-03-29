@@ -6,7 +6,7 @@
     {applications, [
         kernel,
         stdlib,
-        %grisp,
+        grisp,
         cowboy,
         gproc,
         jsone,
